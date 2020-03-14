@@ -1,0 +1,62 @@
+﻿PS C:\Users\Anderson\Google Drive\CURSOS\React_Omnistack\Bootcamp\modulo02> yarn init -y //cria o package.json
+
+PS C:\Users\Anderson\Google Drive\CURSOS\React_Omnistack\Bootcamp\modulo02> yarn add express
+
+PS C:\Users\Anderson\Google Drive\CURSOS\React_Omnistack\Bootcamp\modulo02> yarn add sucrase nodemon -D //sucrase faz com que o node leia funcionalidades mais recentes do javascript tipo import express from 'express', e nodemon é para assim que alterar ja atualizar
+
+C:\Users\Anderson\Google Drive\CURSOS\React_Omnistack\Bootcamp\modulo02>docker run --name database -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres //comando docker para criar container do postgres no ambiente de desenvolvimento
+
+docker ps //mostra todos os containers em execução na maquina
+
+docker ps -a //mostra tbm os container que não estão rodando
+
+docker start database //database é o nome do db poderia ser outro
+
+docker logs database //mostra erros
+
+docker stop database
+
+vamos usar nesse projeto o mesmo padrão do airbnb
+
+yarn eslint // linting vai verificar se estou seguindo o nosso padrão
+
+yarn eslint --init
+
+yarn add prettier eslint-config-prettier eslint-plugin-prettier -D //deixa o codigo mais bonito
+
+yarn eslint --fix src --ext .js
+
+yarn add sequelize
+
+yarn add sequelize-cli -D
+
+yarn add pg pg-hstore //postgress - sequelize
+
+yarn sequelize migration:create --name create-users
+//após configurar migration
+yarn sequelize db:migrate
+
+yarn sequelize db:migrate:undo //desfaz a ultima vez que foi feita
+yarn sequelize db:migrate:undo:all
+
+yarn add bcryptjs //enccriptaão
+
+yarn add yup //validação de campos, schema validation
+
+yarn add multer // para upload de arquivos (fotos)., multipart farm data
+
+yarn sequelize migration:create --name=create-files //criar tabela de arquivos
+
+yarn sequelize db:migrate // cria db
+
+yarn add date-fns@next // manipulação de data, @= pega a ultima versão
+
+docker run --name mongoengajei -p 27017:27017 -d -t mongo // docker do mongo
+
+docker run --name redisengajei -p 6379:6379 -d -t redis:alpine // redis para cadastrar as filas
+
+mailtrap // para teste de email em desenvolvimento
+
+yarn add bee-queue // para controlar as filas, esse é performatico, para mais robustes ver kue
+127.0.0.1
+0.0.0.0:32768->6379/tcp
