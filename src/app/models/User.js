@@ -10,6 +10,9 @@ class User extends Model {
         password: Sequelize.VIRTUAL,
         password_hash: Sequelize.STRING,
         provider: Sequelize.BOOLEAN,
+        phone: Sequelize.STRING,
+        cpf: Sequelize.STRING,
+        id_asaas: Sequelize.STRING,
       },
       { sequelize }
     );
