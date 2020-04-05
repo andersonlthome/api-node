@@ -1,7 +1,8 @@
 {
-  "name": "gobarber-api",
+  "name": "engajei-api-node",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/server.js",
+  "author": "Anderson Lottermann Thomé",
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/server.js",

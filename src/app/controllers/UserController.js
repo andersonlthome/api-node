@@ -119,9 +119,7 @@ class UserController {
       }
     );
 
-    console.log(
-      await ClientAsaas.updateClient(name, email, phone, cpf, id_asaas)
-    );
+    await ClientAsaas.updateClient(name, email, phone, cpf, id_asaas);
 
     return res.json({
       id,
@@ -132,6 +130,11 @@ class UserController {
       cpf,
       id_asaas,
     });
+  }
+
+  async getUser(req, res) {
+    const user = await User.findByPk(req.userId);
+    return res.json({ user });
   }
 }
 
