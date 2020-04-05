@@ -106,15 +106,22 @@ class UserController {
 
     await user.update(req.body);
 
-    const { id, name, avatar, phone, cpf } = await User.findByPk(req.userId, {
-      include: [
-        {
-          model: File,
-          as: 'avatar',
-          attributes: ['id', 'path', 'url'],
-        },
-      ],
-    });
+    const { id, name, avatar, phone, cpf, id_asaas } = await User.findByPk(
+      req.userId,
+      {
+        include: [
+          {
+            model: File,
+            as: 'avatar',
+            attributes: ['id', 'path', 'url'],
+          },
+        ],
+      }
+    );
+
+    console.log(
+      await ClientAsaas.updateClient(name, email, phone, cpf, id_asaas)
+    );
 
     return res.json({
       id,
@@ -123,6 +130,7 @@ class UserController {
       avatar,
       phone,
       cpf,
+      id_asaas,
     });
   }
 }
