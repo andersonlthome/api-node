@@ -1,4 +1,13 @@
-﻿PS C:\Users\Anderson\Google Drive\CURSOS\React_Omnistack\Bootcamp\modulo02> yarn init -y //cria o package.json
+﻿# CRIAR CONTAINER NODE
+# docker build -t app-engajei .
+# INICIAR A PRIMEIRA VEZ
+# docker run -p 3333:3333 -d app-engajei, depois, docker stop <id container, pegar com "docker ps">
+# INICIAR A APLICAÇÃO
+# docker-compose up
+# criar migrations
+yarn sequelize db:migrate
+
+PS C:\Users\Anderson\Google Drive\CURSOS\React_Omnistack\Bootcamp\modulo02> yarn init -y //cria o package.json
 
 PS C:\Users\Anderson\Google Drive\CURSOS\React_Omnistack\Bootcamp\modulo02> yarn add express
 

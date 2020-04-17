@@ -25,6 +25,8 @@
 
 ## Run
  - git clone https://github.com/andersonlthome/api-node-gobarber-rocketseat
- - yarn
- - yarn dev
-
+ - docker build -t app-engajei .  //CRIAR CONTAINER NODE
+ - docker run -p 3333:3333 -d app-engajei //SOMENTE A PRIMEIRA VEZ
+ - docker stop <id container> //pegar com "docker ps"
+ - docker-compose up //INICIAR A APLICAÇÃO
+ - yarn sequelize db:migrate //CRIAR MIGRATION
