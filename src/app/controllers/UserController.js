@@ -5,12 +5,13 @@ import { cpf as cpfValidator } from 'cpf-cnpj-validator';
 import User from '../models/User';
 import File from '../models/File';
 
-import ClientAsaas from '../asaas/Clients';
+import ClientAsaas from '../asaas/Client';
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 class UserController {
   async store(req, res) {
+    console.log("TESTEEEEEEEEEE--------------");
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string()
@@ -22,6 +23,8 @@ class UserController {
         .required()
         .min(6),
     });
+
+    
 
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });

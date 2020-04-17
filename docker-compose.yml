@@ -1,11 +1,17 @@
+# CRIAR CONTAINER NODE
+# docker build -t app-engajei .
+# INICIAR A PRIMEIRA VEZ
+# docker run -p 3333:3333 -d app-engajei, depois, docker stop <id container, pegar com "docker ps">
+# INICIAR A APLICAÇÃO
+# docker-compose up
+
 version: '3'
 services:
   app:
-    container_name: appNode
-    build: .
+    build: .      
     command: yarn dev
     volumes:
-      - .:/usr/src/app
+      - .:/usr/app
     ports:
       - "3333:3333"
     env_file: .env

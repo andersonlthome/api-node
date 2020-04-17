@@ -14,7 +14,6 @@ import './database';
 class App {
   constructor() {
     this.server = express();
-
     Sentry.init(sentryConfig);
     this.middlewares();
     this.routes();

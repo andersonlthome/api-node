@@ -1,7 +1,7 @@
 # Versão de uma máquina com o básico do node versão 10
-FROM node:10-alpine
+FROM node:alpine
 # Aonde vai ser descarregada a imagem da nossa app dentro da máquina docker
-WORKDIR /usr/src/app
+WORKDIR /usr/app
 # Copiar os arquivos
 COPY package*.json ./
 # Executa o yarn para instalar as dependências
