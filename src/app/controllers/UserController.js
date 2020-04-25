@@ -143,23 +143,22 @@ class UserController {
     // if 
     // console.log(req.body);
     const user = await User.findByPk(req.body.id);
-    // const data = user.dataValues;
-    // const createdAt = data.createdAt;
-    // const today = new Date();
-    // const now = moment(today);
-    // let duration = moment.duration(now.diff(moment(createdAt)));
+    const data = user.dataValues;
+    const { createdAt } = data;
+    const today = new Date();
+    const now = moment(today);
+    const duration = moment.duration(now.diff(moment(createdAt)));
 
-    // if (duration.asDays() < 3) {
-    //   user.status = 'TRYING';
-    // }
-    // if ((duration.asDays() > 3) && (user.status !== 'ACTIVE')) {
-    //   user.status = 'TRYED'; 
-    // }
-    // await user.update(data);
-    
+    if (duration.asDays() < 3) {
+      user.status = 'TRYING';
+    }
+    if (duration.asDays() > 3 && user.status !== 'ACTIVE') {
+      user.status = 'TRYED';
+    }
+    await user.update(data);
+
     return res.json({ user });
   }
-
 }
 
 export default new UserController();
