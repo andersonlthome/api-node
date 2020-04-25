@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import moment from 'moment';
 
 import { cpf as cpfValidator } from 'cpf-cnpj-validator';
 
@@ -11,7 +12,6 @@ const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2
 
 class UserController {
   async store(req, res) {
-    console.log("TESTEEEEEEEEEE--------------");
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       email: Yup.string()
@@ -23,8 +23,6 @@ class UserController {
         .required()
         .min(6),
     });
-
-    
 
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
@@ -106,7 +104,7 @@ class UserController {
     if (oldPassword && !(await user.checkPassword(oldPassword))) {
       return res.status(401).json({ error: 'Password does not match' });
     }
-
+    console.log(req.body);
     await user.update(req.body);
 
     const { id, name, avatar, phone, cpf, id_asaas } = await User.findByPk(
@@ -139,6 +137,34 @@ class UserController {
     const user = await User.findByPk(req.userId);
     return res.json({ user });
   }
+  
+  async updateStatus(req, res) {
+    // getStatusCobrança atual 
+    // if 
+    // console.log(req.body);
+    const user = await User.findByPk(req.body.id);
+    // const data = user.dataValues;
+    // const createdAt = data.createdAt;
+    // const today = new Date();
+    // const now = moment(today);
+    // let duration = moment.duration(now.diff(moment(createdAt)));
+
+    // if (duration.asDays() < 3) {
+    //   user.status = 'TRYING';
+    // }
+    // if ((duration.asDays() > 3) && (user.status !== 'ACTIVE')) {
+    //   user.status = 'TRYED'; 
+    // }
+    // await user.update(data);
+    
+    return res.json({ user });
+  }
+
 }
 
 export default new UserController();
+
+// export enum ClientType {
+//   backend = 1,
+//   auth = 0
+// }

@@ -13,6 +13,8 @@ class User extends Model {
         phone: Sequelize.STRING,
         cpf: Sequelize.STRING,
         id_asaas: Sequelize.STRING,
+        status: Sequelize.STRING,
+        createdAt: Sequelize.DATE
       },
       { sequelize }
     );

@@ -7,13 +7,15 @@
 # criar migrations
 yarn sequelize db:migrate
 
-PS C:\Users\Anderson\Google Drive\CURSOS\React_Omnistack\Bootcamp\modulo02> yarn init -y //cria o package.json
 
-PS C:\Users\Anderson\Google Drive\CURSOS\React_Omnistack\Bootcamp\modulo02> yarn add express
+PASSOS INICIAIS DO CURSO
+//cria o package.json
+yarn init -y 
 
-PS C:\Users\Anderson\Google Drive\CURSOS\React_Omnistack\Bootcamp\modulo02> yarn add sucrase nodemon -D //sucrase faz com que o node leia funcionalidades mais recentes do javascript tipo import express from 'express', e nodemon é para assim que alterar ja atualizar
-
-C:\Users\Anderson\Google Drive\CURSOS\React_Omnistack\Bootcamp\modulo02>docker run --name database -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres //comando docker para criar container do postgres no ambiente de desenvolvimento
+yarn add express
+//sucrase faz com que o node leia funcionalidades mais recentes do javascript tipo import express from 'express', e nodemon é para assim que alterar ja atualizar
+yarn add sucrase nodemon -D 
+docker run --name database -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres //comando docker para criar container do postgres no ambiente de desenvolvimento
 
 docker ps //mostra todos os containers em execução na maquina
 
