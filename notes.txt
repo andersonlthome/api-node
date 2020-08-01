@@ -1,7 +1,10 @@
 ﻿# CRIAR CONTAINER NODE
 # docker build -t app-engajei .
 # INICIAR A PRIMEIRA VEZ
-# docker run -p 3333:3333 -d app-engajei, depois, docker stop <id container, pegar com "docker ps">
+# docker run --name postgresengajei -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres //comando docker para criar container do postgres no ambiente de desenvolvimento
+# docker run --name mongoengajei -p 27017:27017 -d -t mongo // docker do mongo
+# docker run --name redisengajei -p 6379:6379 -d -t redis:alpine // redis para cadastrar as filas
+# docker run --name app-engajei -p 3333:3333 -d app-engajei, depois, docker stop <id container, pegar com "docker ps">
 # INICIAR A APLICAÇÃO
 # docker-compose up
 # criar migrations

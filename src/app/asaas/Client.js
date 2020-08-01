@@ -5,14 +5,14 @@ import asaasConfig from '../../config/asaas';
 class Client {
   async createClient(name, email, mobilePhone, cpfCnpj) {
     const res = await axios.post('https://www.asaas.com/api/v3/customers',
-    `{ "name": ${name},  "email": ${email},  "mobilePhone": ${mobilePhone},  "cpfCnpj":${cpfCnpj} }`,
+    `{ "name": ${name},  "email": ${email},  "mobilePhone": ${null},  "cpfCnpj":${null} }`,
      {
         headers: {
           'Content-Type': asaasConfig.contentType,
           'access_token': asaasConfig.accessToken,
         },
       }
-    );
+    ).catch(err => {console.log('Asaas Error: ', err)});
     return res;
   }
 
@@ -25,7 +25,7 @@ class Client {
           'access_token': asaasConfig.accessToken,
         },
       }
-    ).catch(err => {console.log(err)});
+    ).catch(err => {console.log('Asaas Error: ', err)});
     return res;
   }
 }

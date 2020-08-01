@@ -3,7 +3,7 @@ FROM node:alpine
 # Aonde vai ser descarregada a imagem da nossa app dentro da máquina docker
 WORKDIR /usr/app
 # Copiar os arquivos
-COPY package*.json ./
+COPY package.json yarn.* ./
 # Executa o yarn para instalar as dependências
 RUN yarn install
 

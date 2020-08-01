@@ -1,67 +1,99 @@
 import * as Yup from 'yup';
 import moment from 'moment';
-
 import { cpf as cpfValidator } from 'cpf-cnpj-validator';
-
+import randomstring from 'randomstring';
 import User from '../models/User';
 import File from '../models/File';
-
 import ClientAsaas from '../asaas/Client';
+import VerificationAccountMail from '../jobs/VerificationAccountMail';
+import Queue from '../../lib/Queue';
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+// enum 
+const ClientStatus = Object.freeze({
+  TRYING: 'TRYING',
+  TRYED: 'TRYED',
+  ACTIVE: 'ACTIVE',
+  PENDING: 'PENDING',
+  INACTIVE: 'INACTIVE',
+});
 
 class UserController {
   async store(req, res) {
-    const schema = Yup.object().shape({
-      name: Yup.string().required(),
-      email: Yup.string()
-        .email()
-        .required(),
-      phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
-      cpf: Yup.number(),
-      password: Yup.string()
-        .required()
-        .min(6),
-    });
+    try {
+      const schema = Yup.object().shape({
+        name: Yup.string().required(),
+        email: Yup.string()
+          .email()
+          .required(),
+        phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+        cpf: Yup.number(),
+        password: Yup.string()
+          .required()
+          .min(6),
+      });
 
-    if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validation fails' });
+      if (!(await schema.isValid(req.body))) {
+        return res.status(400).json({ error: 'Validation fails' });
+      }
+
+      const userExists = await User.findOne({ where: { email: req.body.email } });
+
+      if (userExists) {
+        return res.status(400).json({ error: 'User already exists' });
+      }
+
+      const asaas = await ClientAsaas.createClient(
+        req.body.name,
+        req.body.email,
+        req.body.phone,
+        req.body.cpf
+      );
+      req.body.id_asaas = asaas.data.id;
+
+      const secretToken = randomstring.generate(7);
+      req.body.secret_token = secretToken;
+      req.body.status = ClientStatus.INACTIVE;
+
+      // TODO: add secretToken
+      // TODO: add ramdomstring.generate() to secretToken
+      // TODO: add status inactive
+      // TODO: add enviar email com secretToken
+      // TODO: add pagina front para inserir codigo
+      // TODO: add pagina front para inserir codigo
+
+      const {
+        id,
+        name,
+        email,
+        provider,
+        phone,
+        cpf,
+        id_asaas,
+        secret_token,
+        status
+      } = await User.create(req.body);
+
+      await Queue.add(VerificationAccountMail.key, {
+        name, email, secret_token
+      });
+
+      // id,
+      //   name,
+      //   email,
+      //   provider,
+      //   phone,
+      //   cpf,
+      //   id_asaas,
+      return res.json({
+        id,
+        status
+      });
+
+    } catch (error) {
+      console.log('Error: ', error);
+      return res.json({ error: 'erro ao criar usuario' })
     }
-
-    const userExists = await User.findOne({ where: { email: req.body.email } });
-
-    if (userExists) {
-      return res.status(400).json({ error: 'User already exists' });
-    }
-
-    const asaas = await ClientAsaas.createClient(
-      req.body.name,
-      req.body.email,
-      req.body.phone,
-      req.body.cpf
-    );
-
-    req.body.id_asaas = asaas.data.id;
-
-    const {
-      id,
-      name,
-      email,
-      provider,
-      phone,
-      cpf,
-      id_asaas,
-    } = await User.create(req.body);
-
-    return res.json({
-      id,
-      name,
-      email,
-      provider,
-      phone,
-      cpf,
-      id_asaas,
-    });
   }
 
   async update(req, res) {
@@ -104,7 +136,7 @@ class UserController {
     if (oldPassword && !(await user.checkPassword(oldPassword))) {
       return res.status(401).json({ error: 'Password does not match' });
     }
-    console.log(req.body);
+    console.log('update', req.body);
     await user.update(req.body);
 
     const { id, name, avatar, phone, cpf, id_asaas } = await User.findByPk(
@@ -137,11 +169,60 @@ class UserController {
     const user = await User.findByPk(req.userId);
     return res.json({ user });
   }
-  
+
+  async verification(req, res) {
+    let statusVerification = false;
+    try {
+      console.log(req.body);
+      const user = await User.findByPk(req.body.id);
+      // console.log(0,user);
+      const dataUser = user.dataValues;
+      console.log(1, dataUser);
+
+      if (dataUser.secret_token === req.body.verificationCode) {
+        dataUser.status = ClientStatus.TRYING;
+        console.log(2, dataUser);
+        await User.update({ 'status': dataUser.status }, { where: { 'id': dataUser.id } }, { multi: true });
+        statusVerification = true;
+      }
+      console.log(statusVerification);
+      return res.json({ 'statusVerification': statusVerification });
+    } catch (error) {
+      console.log(1, error);
+      return res.json({ 'statusVerification': statusVerification });
+    }
+
+  }
+
+  async resendSecretTokenEmail(req, res) {
+    // const statusEmail = false;
+    console.log(req.body);
+    const user = await User.findByPk(req.body.id);
+    // console.log(0,user);
+
+    const { name, email, secret_token } = user.dataValues;
+    console.log(1, name, email, secret_token);
+
+    try {
+      await Queue.add(VerificationAccountMail.key, {
+        name, email, secret_token
+      });
+      let statusEmail = true;
+      return res.json({ 'statusEmail': statusEmail });
+    } catch (error) {
+      let statusEmail = false;
+      console.log('error: ' + error);
+      return res.json({ 'statusEmail': statusEmail });
+    }
+
+
+  }
+
   async updateStatus(req, res) {
     // getStatusCobrança atual 
     // if 
-    // console.log(req.body);
+    console.log(req.body);
+
     const user = await User.findByPk(req.body.id);
     const data = user.dataValues;
     const { createdAt } = data;
@@ -150,10 +231,10 @@ class UserController {
     const duration = moment.duration(now.diff(moment(createdAt)));
 
     if (duration.asDays() < 3) {
-      user.status = 'TRYING';
+      user.status = ClientStatus.TRYING;
     }
     if (duration.asDays() > 3 && user.status !== 'ACTIVE') {
-      user.status = 'TRYED';
+      user.status = ClientStatus.TRYED;
     }
     await user.update(data);
 
@@ -162,8 +243,3 @@ class UserController {
 }
 
 export default new UserController();
-
-// export enum ClientType {
-//   backend = 1,
-//   auth = 0
-// }

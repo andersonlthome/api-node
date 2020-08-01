@@ -2,32 +2,34 @@
 # docker build -t app-engajei .
 # INICIAR A PRIMEIRA VEZ
 # docker run -p 3333:3333 -d app-engajei, depois, docker stop <id container, pegar com "docker ps">
-# INICIAR A APLICAÇÃO
+# INICIAR A APLICAÇÃO - verificar se não tem postgres rodando na mesma porta
 # docker-compose up
 
 version: '3'
 services:
-  app:
-    build: .      
-    command: yarn dev
-    volumes:
-      - .:/usr/app
-    ports:
-      - "3333:3333"
-    env_file: .env
-    depends_on:
-      - db
-      - mongo
-      - redis
+  # app:
+  #   container_name: app-engajei
+  #   build: .      
+  #   command: yarn dev
+  #   volumes:
+  #     - .:/usr/app
+  #   ports:
+  #     - "3333:3333"
+  #   env_file: .env
+  #   depends_on:
+  #     - db
+  #     - mongo
+  #     - redis
   db:
     container_name: postgres_dev
-    image: postgres:latest
+    image: postgres
     ports:
-      - "5432:5432"
+      - "5430:5432"
+    # command: postgres -c listen_addresses='*'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: docker
-      POSTGRES_DB: engajei
+      POSTGRES_DB: engajei    
   redis:
     container_name: redis_dev
     image: redis:alpine
@@ -37,7 +39,7 @@ services:
     container_name: mongoDB_dev
     image: mongo
     volumes:
-      - ./data:/data/db
+      - /data/db
     ports:
       - "27017:27017"
 

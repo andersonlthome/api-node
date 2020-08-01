@@ -27,7 +27,8 @@
     "nodemailer-express-handlebars": "^3.1.0",
     "pg": "^7.12.1",
     "pg-hstore": "^2.3.3",
-    "sequelize": "^5.16.0",
+    "randomstring": "^1.1.5",
+    "sequelize": "^6.2.0",
     "youch": "^2.0.10",
     "yup": "^0.27.0"
   },
@@ -39,7 +40,7 @@
     "eslint-plugin-prettier": "^3.1.0",
     "nodemon": "^1.19.1",
     "prettier": "^1.18.2",
-    "sequelize-cli": "^5.5.0",
+    "sequelize-cli": "^6.2.0",
     "sucrase": "^3.10.1"
   }
 }

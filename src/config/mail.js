@@ -7,11 +7,11 @@ export default {
     pass: process.env.MAIL_PASS,
   },
   default: {
-    from: 'Equipe GoBarber <noreply@gobarber.com>',
+    from: 'Equipe Engajei <anderson_lottermann@hotmail.com>',
   },
 };
 
-/*
+/* noreply@engajei.com
 Serviços smtp para envio de emails
 
 Amazon SES
