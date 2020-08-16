@@ -9,7 +9,7 @@ import VerificationAccountMail from '../jobs/VerificationAccountMail';
 import Queue from '../../lib/Queue';
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-// enum 
+// enum
 const ClientStatus = Object.freeze({
   TRYING: 'TRYING',
   TRYED: 'TRYED',
@@ -55,18 +55,11 @@ class UserController {
       req.body.secret_token = secretToken;
       req.body.status = ClientStatus.INACTIVE;
 
-      // TODO: add secretToken
-      // TODO: add ramdomstring.generate() to secretToken
-      // TODO: add status inactive
-      // TODO: add enviar email com secretToken
-      // TODO: add pagina front para inserir codigo
-      // TODO: add pagina front para inserir codigo
-
       const {
         id,
         name,
         email,
-        provider,
+        admin,
         phone,
         cpf,
         id_asaas,
@@ -97,6 +90,7 @@ class UserController {
   }
 
   async update(req, res) {
+
     const schema = Yup.object().shape({
       name: Yup.string(),
       email: Yup.string().email(),
@@ -113,7 +107,7 @@ class UserController {
       ),
     });
 
-    if (!cpfValidator.isValid(req.body.cpf)) {
+    if (!cpfValidator.isValid(req.body.cpf) && req.body.cpf!=undefined) {
       return res.status(400).json({ error: 'Cpf Invalid' });
     }
 
@@ -124,8 +118,9 @@ class UserController {
     const { email, oldPassword } = req.body;
 
     const user = await User.findByPk(req.userId);
-
-    if (email !== user.email) {
+    // console.log(req.body);
+    // console.log(user);
+    if (email !== user.dataValues.email && email != undefined) {
       const userExists = await User.findOne({ where: { email } });
 
       if (userExists) {
@@ -136,7 +131,7 @@ class UserController {
     if (oldPassword && !(await user.checkPassword(oldPassword))) {
       return res.status(401).json({ error: 'Password does not match' });
     }
-    console.log('update', req.body);
+    // console.log('update', req.body);
     await user.update(req.body);
 
     const { id, name, avatar, phone, cpf, id_asaas } = await User.findByPk(
@@ -151,7 +146,7 @@ class UserController {
         ],
       }
     );
-
+ console.log(id, name, avatar, phone, cpf, id_asaas, email);
     await ClientAsaas.updateClient(name, email, phone, cpf, id_asaas);
 
     return res.json({
@@ -219,8 +214,8 @@ class UserController {
   }
 
   async updateStatus(req, res) {
-    // getStatusCobrança atual 
-    // if 
+    // getStatusCobrança atual
+    // if
     console.log(req.body);
 
     const user = await User.findByPk(req.body.id);

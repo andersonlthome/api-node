@@ -3,13 +3,13 @@ import multer from 'multer';
 import multerConfig from './config/multer';
 
 import UserController from './app/controllers/UserController';
-import ProviderController from './app/controllers/ProviderController';
+// import ProviderController from './app/controllers/ProviderController';
 import SessionController from './app/controllers/SessionController';
 import FileController from './app/controllers/FileController';
-import AppointmentController from './app/controllers/AppointmentController';
-import ScheduleController from './app/controllers/ScheduleController';
+// import AppointmentController from './app/controllers/AppointmentController';
+// import ScheduleController from './app/controllers/ScheduleController';
 import NotificationController from './app/controllers/NotificationController';
-import AvailableController from './app/controllers/AvailableController';
+// import AvailableController from './app/controllers/AvailableController';
 import Signature from './app/asaas/Signature';
 
 import authMiddleware from './app/middlewares/auth';
@@ -36,15 +36,15 @@ routes.post('/files', upload.single('file'), FileController.store);
 // routes.get('/appointments', AppointmentController.index);
 // routes.delete('/appointments/:id', AppointmentController.delete);
 
-routes.get('/providers', ProviderController.index);
-routes.get('/providers/:providerId/Available', AvailableController.index);
+// routes.get('/providers', ProviderController.index);
+// routes.get('/providers/:providerId/Available', AvailableController.index);
 
 // routes.get('/schedule', ScheduleController.index);
 
 routes.get('/notifications', NotificationController.index);
 routes.put('/notifications/:id', NotificationController.update);
 
-// routes.post('/signature', Signature.createSignature);
+routes.post('/signature', Signature.newSignature);
 
 
 export default routes;

@@ -6,7 +6,7 @@ class CancellationMail {
   get key() {
     return 'CancellationMail';
   }
-
+  // TODO: EMAIL PARA ADMIN QUANDO CLIENTE CANCELAR
   async handle({ data }) {
     const { appointment } = data;
 

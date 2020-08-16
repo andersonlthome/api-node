@@ -38,16 +38,16 @@ class SessionController {
       return res.status(401).json({ error: 'Password does not match' });
     }
 
-    const { id, name, avatar, provider, status } = user;
-
+    const { id, name, avatar, status, admin } = user;
+    // TODO: enviar provider, fazer logica somente provider nova aba, para poder alterar os planos talvez outras coisas, mudar provider para admin boolean
     return res.json({
       user: {
         id,
         name,
         email,
         avatar,
-        provider,
         status,
+        admin,
       },
       token: jwt.sign({ id }, authConfig.secret, {
         expiresIn: authConfig.expiresIn,

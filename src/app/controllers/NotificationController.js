@@ -3,17 +3,17 @@ import User from '../models/User';
 
 class NotificationController {
   async index(req, res) {
-    const isProvider = await User.findOne({
+    const isAdmin = await User.findOne({
       where: {
         id: req.userId,
-        provider: true,
+        admin: true,
       },
     });
 
-    if (!isProvider) {
+    if (!isAdmin) {
       return res
         .status(401)
-        .json({ error: 'Only providers can load notifications' });
+        .json({ error: 'Only admin can load notifications' });
     }
 
     const notifications = await Notification.find({
